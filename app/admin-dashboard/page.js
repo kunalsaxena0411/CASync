@@ -1,10 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 
 export default function AdminDashboardPage() {
-  const searchParams = useSearchParams();
   const [activeView, setActiveView] = useState("loginPage");
   const [adminEmail, setAdminEmail] = useState("");
   const [adminPassword, setAdminPassword] = useState("");
@@ -12,14 +10,14 @@ export default function AdminDashboardPage() {
   const [newAdminPassword, setNewAdminPassword] = useState("");
 
   useEffect(() => {
-    const requestedView = searchParams.get("view");
+    const requestedView = new URLSearchParams(window.location.search).get("view");
     if (requestedView === "dashboard") {
       setActiveView("dashboard");
       return;
     }
 
     setActiveView("loginPage");
-  }, [searchParams]);
+  }, []);
 
   function login() {
     if (adminEmail === "muneshlife@gmail.com" && adminPassword === "1234567890") {
