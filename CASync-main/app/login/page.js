@@ -3,48 +3,48 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
+import { showToast, ToastContainer } from "@/components/Toast";
 
 export default function LoginPage() {
   const router = useRouter();
 
   async function handleLogin(event) {
-  event.preventDefault();
+    event.preventDefault();
 
-  const formData = new FormData(event.currentTarget);
-  const email = String(formData.get("email") || "").trim().toLowerCase();
-  const password = String(formData.get("password") || "");
+    const formData = new FormData(event.currentTarget);
+    const email = String(formData.get("email") || "").trim().toLowerCase();
+    const password = String(formData.get("password") || "");
 
-  try {
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!data.success) {
-      alert("Invalid email or password.");
-      return;
+      if (!data.success) {
+        showToast("Invalid email or password.", "error");
+        return;
+      }
+
+      localStorage.setItem("currentUser", JSON.stringify(data.user));
+      localStorage.setItem("isLoggedIn", "true");
+      document.cookie = "isLoggedIn=true; path=/";
+
+      showToast("Login successful! Redirecting...", "success");
+      setTimeout(() => router.push("/dashboard"), 1200);
+
+    } catch (error) {
+      console.error(error);
+      showToast("Something went wrong! Please try again.", "error");
     }
-
-    localStorage.setItem("currentUser", JSON.stringify(data.user));
-    localStorage.setItem("isLoggedIn", "true");
-
-    document.cookie = "isLoggedIn=true; path=/";
-
-    alert("Login successful!");
-    router.push("/dashboard");
-
-  } catch (error) {
-    console.error(error);
-    alert("Something went wrong!");
   }
-}
+
   return (
     <>
+      <ToastContainer />
       <SiteHeader />
       <main className="main-content">
         <div className="container">
@@ -65,9 +65,7 @@ export default function LoginPage() {
                 <label htmlFor="password">Password</label>
                 <input type="password" id="password" name="password" required />
               </div>
-              <button type="submit" className="submit-btn">
-                Login
-              </button>
+              <button type="submit" className="submit-btn">Login</button>
             </form>
             <div className="auth-links">
               <p>
@@ -93,9 +91,7 @@ export default function LoginPage() {
           margin-bottom: 30px;
           color: var(--primary-color);
         }
-        .form-group {
-          margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
         .form-group label {
           display: block;
           margin-bottom: 5px;
@@ -123,9 +119,7 @@ export default function LoginPage() {
           cursor: pointer;
           transition: background-color 0.3s;
         }
-        .submit-btn:hover {
-          background-color: #2980b9;
-        }
+        .submit-btn:hover { background-color: #2980b9; }
         .auth-links {
           text-align: center;
           margin-top: 20px;
@@ -134,9 +128,7 @@ export default function LoginPage() {
           color: var(--secondary-color);
           text-decoration: none;
         }
-        .auth-links :global(a:hover) {
-          text-decoration: underline;
-        }
+        .auth-links :global(a:hover) { text-decoration: underline; }
         .back-button {
           display: inline-block;
           padding: 10px 20px;
@@ -146,9 +138,7 @@ export default function LoginPage() {
           border-radius: 4px;
           margin-bottom: 20px;
         }
-        .back-button:hover {
-          background-color: #2980b9;
-        }
+        .back-button:hover { background-color: #2980b9; }
       `}</style>
     </>
   );

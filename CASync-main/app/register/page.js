@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SiteFooter, SiteHeader } from "@/components/SiteChrome";
+import { showToast, ToastContainer } from "@/components/Toast";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -25,19 +26,20 @@ export default function RegisterPage() {
       const result = await res.json();
 
       if (result.success) {
-        alert("Registration successful! Please login with your email and password.");
-        router.push("/login");
+        showToast("Registration successful! Please login.", "success");
+        setTimeout(() => router.push("/login"), 1200);
       } else {
-        alert(result.message || "Registration failed. Please try again.");
+        showToast(result.message || "Registration failed. Please try again.", "error");
       }
     } catch (err) {
-      alert("Something went wrong. Please try again.");
+      showToast("Something went wrong. Please try again.", "error");
       console.error(err);
     }
   }
 
   return (
     <>
+      <ToastContainer />
       <SiteHeader />
       <main className="main-content">
         <div className="container">
@@ -73,9 +75,7 @@ export default function RegisterPage() {
                 <label htmlFor="password">Password</label>
                 <input type="password" id="password" name="password" required />
               </div>
-              <button type="submit" className="submit-btn">
-                Register
-              </button>
+              <button type="submit" className="submit-btn">Register</button>
             </form>
             <div className="auth-links">
               <p>
@@ -101,9 +101,7 @@ export default function RegisterPage() {
           margin-bottom: 30px;
           color: var(--primary-color);
         }
-        .form-group {
-          margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
         .form-group label {
           display: block;
           margin-bottom: 5px;
@@ -131,9 +129,7 @@ export default function RegisterPage() {
           cursor: pointer;
           transition: background-color 0.3s;
         }
-        .submit-btn:hover {
-          background-color: #2980b9;
-        }
+        .submit-btn:hover { background-color: #2980b9; }
         .auth-links {
           text-align: center;
           margin-top: 20px;
@@ -142,9 +138,7 @@ export default function RegisterPage() {
           color: var(--secondary-color);
           text-decoration: none;
         }
-        .auth-links :global(a:hover) {
-          text-decoration: underline;
-        }
+        .auth-links :global(a:hover) { text-decoration: underline; }
         .back-button {
           display: inline-block;
           padding: 10px 20px;
@@ -154,9 +148,7 @@ export default function RegisterPage() {
           border-radius: 4px;
           margin-bottom: 20px;
         }
-        .back-button:hover {
-          background-color: #2980b9;
-        }
+        .back-button:hover { background-color: #2980b9; }
       `}</style>
     </>
   );
