@@ -33,8 +33,8 @@ export default function LoginPage() {
       localStorage.setItem("isLoggedIn", "true");
       document.cookie = "isLoggedIn=true; path=/";
 
-      showToast("Login successful! Redirecting...", "success");
-      setTimeout(() => router.push("/dashboard"), 1200);
+      showToast("Login successful!", "success");
+      router.push("/dashboard");
 
     } catch (error) {
       console.error(error);

@@ -8,8 +8,20 @@ export async function POST(req) {
 
     const data = await req.json();
 
+    const email = String(data?.email || "").trim().toLowerCase();
+    const password = String(data?.password || "");
+
+    if (!email || !password) {
+      return Response.json(
+        { success: false, message: "Email and password are required." },
+        { status: 400 }
+      );
+    }
+
     // Step 1: Find user by email only
-    const user = await User.findOne({ email: data.email });
+    const user = await User.findOne({ email })
+      .select("name email mobile password")
+      .lean();
 
     if (!user) {
       return Response.json(
@@ -19,7 +31,7 @@ export async function POST(req) {
     }
 
     // Step 2: Compare entered password with hashed password in DB
-    const isMatch = await bcrypt.compare(data.password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return Response.json(
