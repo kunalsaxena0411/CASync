@@ -359,42 +359,50 @@ export default function DashboardPage() {
   }
 
   function PageProfile() {
-    return <div style={{maxWidth:680}}>
+    return <div className="profile-container">
       <div className="page-heading">
         <div><h2 className="page-title">My Profile</h2><p className="page-sub">Manage your account information</p></div>
         <button className={`btn-outline${editing?" danger":""}`} onClick={()=>setEditing(!editing)}>
           {editing?<><i className="fas fa-times"/> Cancel</>:<><i className="fas fa-edit"/> Edit Profile</>}
         </button>
       </div>
-      <div className="card" style={{marginBottom:"1.5rem"}}>
-        <div className="card-header"><h3 className="card-title">Personal Information</h3></div>
-        <div className="card-body">
-          {editing
-            ? <div style={{display:"grid",gap:"1rem"}}>
-                {[["Full Name",profileName,setProfileName,"text"],["Email",profileEmail,setProfileEmail,"email"],["Mobile",profileMobile,setProfileMobile,"tel"]].map(([l,v,fn,t])=>(
-                  <div className="form-group" key={l}><label className="form-label">{l}</label><input className="input-field" style={{paddingLeft:12}} type={t} value={v} onChange={e=>fn(e.target.value)}/></div>
-                ))}
-                <div style={{display:"flex",gap:8,marginTop:4}}>
-                  <button className="btn-primary" onClick={()=>{setEditing(false);showToast("Profile updated!","success");}}><i className="fas fa-save"/> Save Changes</button>
-                  <button className="btn-outline" onClick={()=>setEditing(false)}>Cancel</button>
-                </div>
-              </div>
-            : <div style={{display:"grid",gap:"1rem"}}>
-                {[["Full Name",profileName],["Email",profileEmail],["Mobile",profileMobile]].map(([l,v])=>(
-                  <div key={l}><p className="form-label">{l}</p><p style={{fontWeight:600,color:"var(--text-main)"}}>{v||"—"}</p></div>
-                ))}
-              </div>}
-        </div>
-      </div>
-      <div className="card">
-        <div className="card-header"><h3 className="card-title">Registered Documents</h3></div>
-        <div className="card-body">
-          {["PAN Card","GST Certificate","Business Registration"].map(doc=>(
-            <div className="method-card" key={doc}>
-              <strong style={{color:"var(--text-main)"}}>{doc}</strong>
-              <p className="act-time">Verified on 15 Jan 2024</p>
+
+      <div className="profile-row">
+        <div className="left-column">
+          <div className="card" style={{marginBottom:"0"}}>
+            <div className="card-header"><h3 className="card-title">Personal Information</h3></div>
+            <div className="card-body">
+              {editing
+                ? <div style={{display:"grid",gap:"1rem"}}>
+                    {[["Full Name",profileName,setProfileName,"text"],["Email",profileEmail,setProfileEmail,"email"],["Mobile",profileMobile,setProfileMobile,"tel"]].map(([l,v,fn,t])=>(
+                      <div className="form-group" key={l}><label className="form-label">{l}</label><input className="input-field" style={{paddingLeft:12}} type={t} value={v} onChange={e=>fn(e.target.value)}/></div>
+                    ))}
+                    <div style={{display:"flex",gap:8,marginTop:4}}>
+                      <button className="btn-primary" onClick={()=>{setEditing(false);showToast("Profile updated!","success");}}><i className="fas fa-save"/> Save Changes</button>
+                      <button className="btn-outline" onClick={()=>setEditing(false)}>Cancel</button>
+                    </div>
+                  </div>
+                : <div style={{display:"grid",gap:"1rem"}}>
+                    {[["Full Name",profileName],["Email",profileEmail],["Mobile",profileMobile]].map(([l,v])=>(
+                      <div key={l}><p className="form-label">{l}</p><p style={{fontWeight:600,color:"var(--text-main)"}}>{v||"—"}</p></div>
+                    ))}
+                  </div>}
             </div>
-          ))}
+          </div>
+        </div>
+
+        <div className="right-column">
+          <div className="card">
+            <div className="card-header"><h3 className="card-title">Registered Documents</h3></div>
+            <div className="card-body">
+              {["PAN Card","GST Certificate","Business Registration"].map(doc=>(
+                <div className="method-card" key={doc}>
+                  <strong style={{color:"var(--text-main)"}}>{doc}</strong>
+                  <p className="act-time">Verified on 15 Jan 2024</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>;
@@ -647,6 +655,14 @@ export default function DashboardPage() {
         .doc-info{flex:1;}
         .doc-name{font-size:15px;font-weight:600;color:var(--text-main);margin-bottom:6px;}
         .doc-meta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text-muted);flex-wrap:wrap;}
+        /* Profile two-column layout */
+        .profile-container{max-width:980px;margin:0 auto;padding:0 8px;}
+        .profile-row{display:flex;gap:20px;align-items:stretch;}
+        .profile-row .left-column{flex:1;}
+        .profile-row .right-column{flex:0 0 320px;}
+        .profile-row .card{height:100%;display:flex;flex-direction:column;}
+        .profile-row .card .card-body{flex:1;}
+        @media(max-width:880px){.profile-row{flex-direction:column}.profile-row .right-column{flex:1}}
         .pay-row{display:flex;justify-content:space-between;align-items:center;padding:14px;border:1px solid var(--card-border);border-radius:10px;margin-bottom:10px;background:#f0fdf4;}
         .method-card{padding:16px;border:1px solid var(--card-border);border-radius:10px;margin-bottom:12px;}
         .tabs-row{display:flex;gap:4px;margin-bottom:16px;background:var(--content-bg);padding:4px;border-radius:10px;width:fit-content;}
